@@ -10,3 +10,5 @@ is used to sync Python requirements.
 
 Command: <br/>
 `uvicorn main:app --reload`
+
+And then go to : http://127.0.0.1:8000/docs
