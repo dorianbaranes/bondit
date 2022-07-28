@@ -79,6 +79,13 @@ async def update_flight(flight:Flight):
 
     #update
     if flight.id in df.index:
+        try:
+            datetime.strptime(flight.departure.strip(), '%H:%M')
+            datetime.strptime(flight.arrival.strip(), '%H:%M')
+        except ValueError:
+            return {'message':'Departure / Arrival time should have the format 00:00'}
+
+
         df.loc[flight.id] = flight.departure, flight.arrival, flight.status
         df.to_csv(csv_filename, index=True)
         return {'message':'This flight has been updated'}
