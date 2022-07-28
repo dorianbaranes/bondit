@@ -1,6 +1,9 @@
 import csv
 from datetime import datetime
-
+from fastapi import FastAPI
+from pydantic import BaseModel
+import pandas as pd
+###################################################PART 1
 def analyze_flights(csv_filename):
     flight_per_arrival_time = dict()
     arrival_times = set()
@@ -40,10 +43,45 @@ def analyze_flights(csv_filename):
 
                 csv_writer.writerow(flight)
 
-if __name__ == "__main__":
-    analyze_flights('flight.csv')
+
+##################################################PART 2
+class Flight(BaseModel):
+    id : str
+    departure: str
+    arrival: str
+    status: str
 
 
+app = FastAPI()
+csv_filename='flight.csv'
+
+@app.get("/get_all_flights")
+async def get_all_flights():
+
+    with open(csv_filename, 'r') as f:
+        csv_reader = csv.reader(f, delimiter=',')
+        next(csv_reader)
+
+        all_flights=list()
+        for row in csv_reader:
+            all_flights.append(row)
+
+    return all_flights
 
 
+@app.post("/update_flight")
+async def update_flight(flight:Flight):
+    print(flight.dict())
+
+
+    df = pd.read_csv(csv_filename, sep=',')
+    df=df.set_index('id')
+
+    #update
+    if flight.id in df.index:
+        df.loc['A12'] = flight.departure, flight.arrival, flight.status
+        df.to_csv(csv_filename, index=True)
+        return {'message':'This flight has been updated'}
+    else:
+        return {'message':'This flight does not exist'}
 

@@ -1,4 +1,4 @@
-flight ID, Arrival, Departure ,success
+id, departure, arrival ,status
 A12, 09:00, 13:00 ,’’
 A14, 12:00, 19:00 ,’’
 B15, 10:00, 13:00 ,’’
