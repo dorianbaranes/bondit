@@ -79,7 +79,7 @@ async def update_flight(flight:Flight):
 
     #update
     if flight.id in df.index:
-        df.loc['A12'] = flight.departure, flight.arrival, flight.status
+        df.loc[flight.id] = flight.departure, flight.arrival, flight.status
         df.to_csv(csv_filename, index=True)
         return {'message':'This flight has been updated'}
     else:
